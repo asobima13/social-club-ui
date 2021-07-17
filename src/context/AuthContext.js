@@ -3,14 +3,14 @@ import AuthReducer from './AuthReducer';
 
 const INITIAL_STATE = {
     user: {
-        _id: "60dcf803e5fcc32158b11a09",
+        _id: "9317d490-e30b-11eb-8327-51b3e539d68f",
         profilePicture: "person/steve-rogers.jpg",
         followers: [],
-        followings: ["60dcc8c07eaf96126875efdf", "60dcd18c8f5eb214507b430a"],
+        followings: ["6894f4f0-e30b-11eb-8327-51b3e539d68f","864c39e0-e30b-11eb-8327-51b3e539d68f"],
         isAdmin: false,
         username: "Steve Rogers",
         email: "srogers@gmail.com",
-        password: "$2b$10$dGdyMxqokn8yrTh7aHnsOeV0ix/S2NOyQVh5uDroyEfeyF4tJm9RC",
+        password: "$2b$10$UbF8E4LdSqf.42d3FED3w.Hu.zYqAKKMDYEJBygiB52onmkd4XJmi",
         desc: "I don't regret living in the past.",
         coverPicture: "",
         city: "New York",

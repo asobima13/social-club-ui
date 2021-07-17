@@ -10,26 +10,32 @@ import { AuthContext } from "../../context/AuthContext"
 export default function Post({post}) {
 
     const PF = process.env.REACT_APP_PUBLIC_FOLDER;
-    const [like,setLike] = useState(post.likes.length);
-    const [isLiked,setIsLiked] = useState(false);
     const [user, setUser] = useState({});
     const {user:currentUser} = useContext(AuthContext)
+    const [like, setLike] = useState(0);
+    const [isLiked, setIsLiked] = useState(false);
 
     useEffect(() => {
         setIsLiked(post.likes.includes(currentUser._id))
     },[currentUser._id, post.likes])
 
+    useEffect(() => {
+        setLike(post.likes.length);
+    },[post.likes])
+
     useEffect( () => {
+        const BE = process.env.REACT_APP_BACKEND
         const fetchUser = async () => {
-            const res = await axios.get(`/users?userId=${post.userId}`)
+            const res = await axios.get(`${BE}/users?userId=${post.userId}`)
             setUser(res.data)
         }
         fetchUser()
     },[post.userId])
 
     const likeHandler = () => {
+        const BE = process.env.REACT_APP_BACKEND
         try {
-            axios.put(`/posts/${post._id}/like`, {userId: currentUser._id})
+            axios.put(`${BE}/posts/${post._id}/like`, {userId: currentUser._id})
         } catch (err) {
             
         }
@@ -54,7 +60,12 @@ export default function Post({post}) {
                 </div>
                 <div className="postCenter">
                     <span className="postText">{post?.desc}</span>
-                    <img src={PF+post.img} alt="" className="postImg" />
+                    {
+                        (post.img && post.img !== 'image.jpg') &&
+                        (
+                            <img src={PF+post.img} alt="" className="postImg" />
+                        )
+                    }
                 </div>
                 <div className="postBottom">
                     <div className="postBottomLeft">

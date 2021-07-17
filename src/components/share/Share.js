@@ -6,6 +6,7 @@ import axios from 'axios'
 
 export default function Share() {
 
+    const BE = process.env.REACT_APP_BACKEND
     const PF = process.env.REACT_APP_PUBLIC_FOLDER;
     const { user } = useContext(AuthContext);
     const desc = useRef()
@@ -26,14 +27,14 @@ export default function Share() {
             // newPost.img = file.name;
             newPost.img = fileName;
             try {
-                await axios.post("/upload", data)
-                window.location.reload()
+                await axios.post(BE + "/upload", data)
             } catch (err) {
                 console.log(err)
             }
         }
         try {
-            await axios.post("/posts", newPost)
+            await axios.post(BE + "/posts", newPost)
+            window.location.reload();
         } catch (err) {
             
         }
@@ -58,7 +59,7 @@ export default function Share() {
                         <label htmlFor="file" className="shareOption">
                             <PermMedia htmlColor="tomato" className="shareIcon" />
                             <span className="shareOptionText">Photo or Video</span>
-                            <input style={{display: "none"}} type="file" id="file" accept=".png,.jpeg,.jpg" onChange={(e) => setFile(e.target.files[0])} />
+                            <input style={{display: "none"}} type="file" id="file" accept=".png,.jpeg,.jpg" onChange={(e) => setFile(e.target.files[0])} disabled/>
                         </label>
                         <div className="shareOption">
                             <Label htmlColor="blue" className="shareIcon" />

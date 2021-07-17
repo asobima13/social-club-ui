@@ -11,10 +11,11 @@ export default function Feed({username}) {
     const { user } = useContext(AuthContext)
 
     useEffect( () => {
+        const BE = process.env.REACT_APP_BACKEND
         const fetchPosts = async () => {
             const res = username
-                ? await axios.get('/posts/profile/' + username)
-                : await axios.get('posts/timeline/' + user._id);
+                ? await axios.get(BE + '/posts/profile/' + username)
+                : await axios.get(BE + '/posts/timeline/' + user._id);
             setPosts(res.data.sort((post1,post2) => {
                 return new Date(post2.createdAt) - new Date(post1.createdAt)
             }));
@@ -27,8 +28,8 @@ export default function Feed({username}) {
             <div className="feedWrapper">
                 {(!username || username === user.username) && <Share />}
                 {
-                    posts.map(post => (
-                        <Post key={post._id} post={post}/>
+                    posts && posts.map((post,i) => (
+                        <Post key={i} post={post}/>
                     ))
                 }
             </div>

@@ -6,6 +6,7 @@ import { Link } from 'react-router-dom'
 
 export default function Register() {
 
+    const BE = process.env.REACT_APP_BACKEND
     const username = useRef()
     const email = useRef()
     const password = useRef()
@@ -23,7 +24,7 @@ export default function Register() {
                 password: password.current.value
             }
             try {
-                await axios.post("/auth/register", user);
+                await axios.post(BE + "/auth/register", user);
                 history.push("/login")
             } catch (err) {
                 console.log(err)

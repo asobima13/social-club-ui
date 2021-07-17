@@ -12,27 +12,32 @@ export default function Rightbar({user}) {
     const PF = process.env.REACT_APP_PUBLIC_FOLDER;
     const [followings, setFollowings] = useState([])
     const { user:currentUser, dispatch } = useContext(AuthContext)
-    const [followed, setFollowed] = useState(currentUser.followings.includes(user?._id))
+    const [followed, setFollowed] = useState(false)
 
     useEffect(() => {
+        setFollowed(currentUser.followings.includes(user?._id))
+    },[currentUser.followings, user?._id])
+
+    useEffect(() => {
+        const BE = process.env.REACT_APP_BACKEND
         const getFollowings = async () => {
             try {
-                const friendList = await axios.get("/users/friends/" + user._id)
+                const friendList = await axios.get(BE + "/users/friends/" + user?._id)
                 setFollowings(friendList.data)
             } catch (err) {
-                console.log(err)
             }
         }
-        getFollowings()
+        user?._id && getFollowings()
     },[user?._id])
 
     const followHandler = async () => {
+        const BE = process.env.REACT_APP_BACKEND
         try {
             if (followed) {
-                await axios.put("/users/" + user._id + "/unfollow", {userId:currentUser._id})
+                await axios.put(BE + "/users/" + user._id + "/unfollow", {userId:currentUser._id})
                 dispatch({type:"UNFOLLOW", payload: user._id})
             } else {
-                await axios.put("/users/" + user._id + "/follow", {userId:currentUser._id})
+                await axios.put(BE + "/users/" + user._id + "/follow", {userId:currentUser._id})
                 dispatch({type:"FOLLOW", payload: user._id})
             }
         } catch (err) {
@@ -90,8 +95,8 @@ export default function Rightbar({user}) {
                 <h4 className="rightbarTitle">User Friends</h4>
                 <div className="rightbarFollowings">
                     {followings.map(following => (
-                        <Link to={"/profile/" + following.username} style={{textDecoration: "none"}}>
-                            <div className="rightbarFollowing" key={following._id}>
+                        <Link to={"/profile/" + following.username} style={{textDecoration: "none"}} key={following._id}>
+                            <div className="rightbarFollowing">
                                 <img src={PF+following.profilePicture || PF+"person/noAvatar.png"} alt="" className="rightbarFollowingImg" />
                                 <span className="rightbarFollowingName">{following.username}</span>
                             </div>
